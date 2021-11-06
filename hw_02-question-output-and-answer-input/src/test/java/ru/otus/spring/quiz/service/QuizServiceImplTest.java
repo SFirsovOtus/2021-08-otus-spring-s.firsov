@@ -67,7 +67,7 @@ class QuizServiceImplTest {
     }
 
     @Test
-    void conductQuizShouldHappenExceptionWhenFoundQuestions() throws QuestionsReadingException, QuestionsNotFoundException {
+    void conductQuizShouldCalculateGradeWhenFoundQuestions() throws QuestionsReadingException, QuestionsNotFoundException {
         Student student = new Student("Imya", "Familiya");
         List<Answer.Variant> variants = List.of(
                 new Answer.Variant("This variant is bad", false),
