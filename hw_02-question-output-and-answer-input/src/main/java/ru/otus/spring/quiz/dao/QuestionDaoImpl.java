@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.quiz.exception.QuestionsReadingException;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 
@@ -30,7 +31,10 @@ public class QuestionDaoImpl implements QuestionDao {
         InputStream csvStream = new ClassPathResource(csvPath)
                 .getInputStream();
 
-        return IOUtils.toString(csvStream, StandardCharsets.UTF_8);
+        String csvText = IOUtils.toString(csvStream, StandardCharsets.UTF_8);
+        csvStream.close();
+
+        return csvText;
     }
 
     private List<CSVRecord> convertCsvTextToRecords(String csvText) throws IOException {
@@ -49,7 +53,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
         if (csvRecord.size() > 1) {
             String answerVariantFormulation = null;
-            Boolean answerVariantIsRight = null;
+            boolean answerVariantIsRight;
             int counter = 0;
 
             for (int i = 1; i < csvRecord.size(); i++) {
@@ -57,11 +61,8 @@ public class QuestionDaoImpl implements QuestionDao {
                 if (counter == 1) {
                     answerVariantFormulation = csvRecord.get(i);
                 } else {
-                    answerVariantIsRight = csvRecord.get(i).equalsIgnoreCase("Y") ? Boolean.TRUE : Boolean.FALSE;
+                    answerVariantIsRight = csvRecord.get(i).equalsIgnoreCase("Y");
                     answerVariants.add(new Answer.Variant(answerVariantFormulation, answerVariantIsRight));
-
-                    answerVariantFormulation = null;
-                    answerVariantIsRight = null;
                     counter = 0;
                 }
             }
@@ -72,15 +73,15 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
 
-    public List<Question> readAll() {
+    @Override
+    public List<Question> readAll() throws QuestionsReadingException {
         List<CSVRecord> csvRecords = null;
 
         try {
             String csvText = readAllCsvText(this.csvPath);
             csvRecords = convertCsvTextToRecords(csvText);
         } catch (IOException exception) {
-            exception.printStackTrace();
-            System.exit(255);
+            throw new QuestionsReadingException(this.csvPath, exception);
         }
 
         List<Question> questions = new ArrayList<>();

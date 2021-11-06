@@ -1,22 +1,18 @@
 package ru.otus.spring.quiz.service;
 
+import ru.otus.spring.quiz.exception.QuestionsReadingException;
 import ru.otus.spring.quiz.domain.Question;
-import ru.otus.spring.quiz.domain.Student;
 
 import java.util.List;
 
 public interface QuestionService {
 
-    List<Question> getAll();
+    List<Question> getAllQuestions() throws QuestionsReadingException;
 
-    Integer printSingle(Question question);
+    void askQuestion(int questionNumber, Question question);
 
-    void printBulk(List<Question> questions);
+    String acceptAnswer();
 
-    Integer printAll();
-
-    Student greet();
-
-    void conductQuiz();
+    boolean checkRightnessOfAnswerToQuestion(String acceptedAnswer, Question askedQuestion);
 
 }

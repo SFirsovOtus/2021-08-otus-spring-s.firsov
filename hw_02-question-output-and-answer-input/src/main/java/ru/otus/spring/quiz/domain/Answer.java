@@ -16,7 +16,7 @@ public class Answer {
     public static class Variant {
 
         private final String formulation;
-        private final Boolean isRight;
+        private final boolean right;
 
     }
 
