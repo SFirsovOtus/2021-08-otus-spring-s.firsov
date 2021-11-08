@@ -28,13 +28,10 @@ public class QuestionDaoImpl implements QuestionDao {
 
 
     private String readAllCsvText(String csvPath) throws IOException {
-        InputStream csvStream = new ClassPathResource(csvPath)
-                .getInputStream();
-
-        String csvText = IOUtils.toString(csvStream, StandardCharsets.UTF_8);
-        csvStream.close();
-
-        return csvText;
+        try (InputStream csvStream = new ClassPathResource(csvPath)
+                .getInputStream()) {
+            return IOUtils.toString(csvStream, StandardCharsets.UTF_8);
+        }
     }
 
     private List<CSVRecord> convertCsvTextToRecords(String csvText) throws IOException {
@@ -53,7 +50,6 @@ public class QuestionDaoImpl implements QuestionDao {
 
         if (csvRecord.size() > 1) {
             String answerVariantFormulation = null;
-            boolean answerVariantIsRight;
             int counter = 0;
 
             for (int i = 1; i < csvRecord.size(); i++) {
@@ -61,7 +57,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 if (counter == 1) {
                     answerVariantFormulation = csvRecord.get(i);
                 } else {
-                    answerVariantIsRight = csvRecord.get(i).equalsIgnoreCase("Y");
+                    boolean answerVariantIsRight = csvRecord.get(i).equalsIgnoreCase("Y");
                     answerVariants.add(new Answer.Variant(answerVariantFormulation, answerVariantIsRight));
                     counter = 0;
                 }
@@ -75,7 +71,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
     @Override
     public List<Question> readAll() throws QuestionsReadingException {
-        List<CSVRecord> csvRecords = null;
+        List<CSVRecord> csvRecords;
 
         try {
             String csvText = readAllCsvText(this.csvPath);

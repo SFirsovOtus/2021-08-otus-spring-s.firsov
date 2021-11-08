@@ -13,22 +13,11 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionDao questionDao;
-    private final ConsoleService consoleService;
 
 
     @Override
     public List<Question> getAllQuestions() throws QuestionsReadingException {
         return questionDao.readAll();
-    }
-
-    @Override
-    public void askQuestion(int questionNumber, Question question) {
-        consoleService.print(question.toStringWithQuestionNumber(questionNumber));
-    }
-
-    @Override
-    public String acceptAnswer() {
-        return consoleService.scan();
     }
 
     @Override

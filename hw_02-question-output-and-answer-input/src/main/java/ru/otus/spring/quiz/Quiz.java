@@ -9,7 +9,7 @@ import ru.otus.spring.quiz.service.QuizService;
 @PropertySource("classpath:application.properties")
 public class Quiz {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Quiz.class);
 
         QuizService quizService = context.getBean(QuizService.class);

@@ -8,16 +8,16 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ConsoleServiceImplTest {
+class IOServiceImplTest {
 
     @Test
     void scanShouldReadEnteredLine() {
         String expectedLine = "Any line";
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(expectedLine.getBytes());
-        ConsoleService consoleService = new ConsoleServiceImpl(inputStream, System.out);
+        IOService IOService = new IOServiceImpl(inputStream, System.out);
 
-        String actualLine = consoleService.scan();
+        String actualLine = IOService.scan();
 
         assertEquals(expectedLine, actualLine);
     }
@@ -27,9 +27,9 @@ class ConsoleServiceImplTest {
         String expectedLine = "Any line";
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ConsoleService consoleService = new ConsoleServiceImpl(System.in, new PrintStream(outputStream));
+        IOService IOService = new IOServiceImpl(System.in, new PrintStream(outputStream));
 
-        consoleService.print(expectedLine);
+        IOService.print(expectedLine);
 
         String actualLine = outputStream.toString().replace(System.lineSeparator(), "");
 

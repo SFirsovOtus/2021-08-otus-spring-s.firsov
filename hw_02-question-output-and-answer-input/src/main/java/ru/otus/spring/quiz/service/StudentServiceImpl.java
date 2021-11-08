@@ -8,17 +8,17 @@ import ru.otus.spring.quiz.domain.Student;
 @AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final ConsoleService consoleService;
+    private final IOService ioService;
 
 
     private String askName() {
-        consoleService.print("What's your name?");
-        return consoleService.scan();
+        ioService.print("What's your name?");
+        return ioService.scan();
     }
 
     private String askSurname() {
-        consoleService.print("What's your surname?");
-        return consoleService.scan();
+        ioService.print("What's your surname?");
+        return ioService.scan();
     }
 
 

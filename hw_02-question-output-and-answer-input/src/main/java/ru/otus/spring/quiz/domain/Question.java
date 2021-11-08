@@ -26,24 +26,4 @@ public class Question {
         return rightAnswerVariantNumber;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder question = new StringBuilder(this.formulation);
-        List<Answer.Variant> answerVariants = this.answer.getVariants();
-
-        for (int i = 0; i < answerVariants.size(); i++) {
-            question.append(System.lineSeparator())
-                    .append("    ")
-                    .append(i + 1)
-                    .append(". ")
-                    .append(answerVariants.get(i).getFormulation());
-        }
-
-        return question.toString();
-    }
-
-    public String toStringWithQuestionNumber(int questionNumber) {
-        return String.format("%s. %s", questionNumber, this);
-    }
-
 }

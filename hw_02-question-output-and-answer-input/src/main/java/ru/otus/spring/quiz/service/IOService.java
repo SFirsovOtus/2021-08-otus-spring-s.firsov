@@ -1,6 +1,6 @@
 package ru.otus.spring.quiz.service;
 
-public interface ConsoleService {
+public interface IOService {
 
     void print(Object object);
 

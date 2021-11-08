@@ -21,14 +21,12 @@ class QuestionServiceImplTest {
 
     @Mock
     private QuestionDao questionDao;
-    @Mock
-    private ConsoleService consoleService;
 
     private QuestionService questionService;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionServiceImpl(questionDao, consoleService);
+        questionService = new QuestionServiceImpl(questionDao);
     }
 
 
@@ -36,31 +34,6 @@ class QuestionServiceImplTest {
     void getAllQuestionsShouldExecuteReadAllOfQuestionDao() throws QuestionsReadingException {
         questionService.getAllQuestions();
         verify(questionDao, times(1)).readAll();
-    }
-
-    @Test
-    void askQuestionShouldExecutePrintOfQuestionWithNumber() {
-        int questionNumber = 123;
-        Question question = new Question("Any question", new Answer(Collections.emptyList()));
-        String textForPrinting = question.toStringWithQuestionNumber(questionNumber);
-
-        doNothing().when(consoleService).print(anyString());
-
-        questionService.askQuestion(questionNumber, question);
-
-        verify(consoleService, times(1)).print(textForPrinting);
-    }
-
-    @Test
-    void acceptAnswerShouldReturnEnteredAnswer() {
-        String expectedAnswer = "Any answer";
-
-        doReturn(expectedAnswer).when(consoleService).scan();
-
-        String actualAnswer = questionService.acceptAnswer();
-
-        verify(consoleService, times(1)).scan();
-        assertEquals(expectedAnswer, actualAnswer);
     }
 
     @Test

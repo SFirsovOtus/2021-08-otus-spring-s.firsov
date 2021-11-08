@@ -14,13 +14,13 @@ import static org.mockito.Mockito.*;
 class StudentServiceImplTest {
 
     @Mock
-    private ConsoleService consoleService;
+    private IOService ioService;
 
     private StudentService studentService;
 
     @BeforeEach
     void setUp() {
-        studentService = new StudentServiceImpl(consoleService);
+        studentService = new StudentServiceImpl(ioService);
     }
 
 
@@ -30,14 +30,14 @@ class StudentServiceImplTest {
         String questionAboutName = "What's your name?";
         String questionAboutSurname = "What's your surname?";
 
-        doNothing().when(consoleService).print(anyString());
-        doReturn(expectedStudent.getName(), expectedStudent.getSurname()).when(consoleService).scan();
+        doNothing().when(ioService).print(anyString());
+        doReturn(expectedStudent.getName(), expectedStudent.getSurname()).when(ioService).scan();
 
         Student actualStudent = studentService.askNameAndSurname();
 
-        verify(consoleService, times(1)).print(questionAboutName);
-        verify(consoleService, times(1)).print(questionAboutSurname);
-        verify(consoleService, times(2)).scan();
+        verify(ioService, times(1)).print(questionAboutName);
+        verify(ioService, times(1)).print(questionAboutSurname);
+        verify(ioService, times(2)).scan();
         assertEquals(expectedStudent.getName(), actualStudent.getName());
         assertEquals(expectedStudent.getSurname(), actualStudent.getSurname());
     }

@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.domain.Student;
-import ru.otus.spring.quiz.exception.QuestionsNotFoundException;
 import ru.otus.spring.quiz.exception.QuestionsReadingException;
+import ru.otus.spring.quiz.mapper.StudentMapper;
 
 import java.util.List;
 
@@ -15,46 +15,38 @@ public class QuizServiceImpl implements QuizService {
 
     private final StudentService studentService;
     private final QuestionService questionService;
-    private final ConsoleService consoleService;
+    private final IOService ioService;
+    private final InterviewerService interviewerService;
+    private final StudentMapper studentMapper;
 
 
-    private List<Question> getAllQuestions(Student student) throws QuestionsReadingException {
-        List<Question> questions = null;
-
-        try {
-            questions =  questionService.getAllQuestions();
-        } catch (QuestionsReadingException exception) {
-            consoleService.print(System.lineSeparator() +
-                    student + ", you're in luck!" + System.lineSeparator() +
-                    "The quiz will have to be postponed." + System.lineSeparator());
-            throw exception;
-        }
-
-        return questions;
+    private void reportAboutPostponement(Student student) {
+        ioService.print(System.lineSeparator() +
+                studentMapper.mapToStringWithNameSurnameOrder(student) + ", you're in luck!" + System.lineSeparator() +
+                "The quiz will have to be postponed." + System.lineSeparator());
     }
 
-    private void greet(Student student, List<Question> questions) throws QuestionsNotFoundException {
-        consoleService.print(System.lineSeparator() +
-                "Hello, " + student + "!");
+    private void greet(Student student) {
+        ioService.print(System.lineSeparator() +
+                "Hello, " + studentMapper.mapToStringWithNameSurnameOrder(student) + "!");
+    }
 
-        if (questions.isEmpty()) {
-            consoleService.print("The sailors have no questions!" + System.lineSeparator());
-            throw new QuestionsNotFoundException();
-        }
+    private void reportAboutNoQuestions() {
+        ioService.print("The sailors have no questions!" + System.lineSeparator());
+    }
 
-        consoleService.print("Let's begin quiz..." + System.lineSeparator());
+    private void reportAboutQuizBeginning() {
+        ioService.print("Let's begin quiz..." + System.lineSeparator());
     }
 
     private int askQuestionsAndCalculateGrade(List<Question> questions) {
-        Question askedQuestion = null;
-        String acceptedAnswer = null;
         int grade = 0;
 
         for(int i = 0; i < questions.size(); i++) {
-            askedQuestion = questions.get(i);
-            questionService.askQuestion(i + 1, askedQuestion);  // "+ 1", т. к. нумерация вопросов начинается с 1 в отличие от индексов списка, которые начинаются с 0
-            acceptedAnswer = questionService.acceptAnswer();
-            consoleService.print("Answer accepted." + System.lineSeparator() + System.lineSeparator());
+            Question askedQuestion = questions.get(i);
+            interviewerService.askQuestion(i + 1, askedQuestion);  // "+ 1", т. к. нумерация вопросов начинается с 1 в отличие от индексов списка, которые начинаются с 0
+            String acceptedAnswer = interviewerService.acceptAnswer();
+            ioService.print("Answer accepted." + System.lineSeparator() + System.lineSeparator());
             if (questionService.checkRightnessOfAnswerToQuestion(acceptedAnswer, askedQuestion)) {
                 grade++;
             }
@@ -64,17 +56,31 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void reportResult(Student student, int grade) {
-        consoleService.print(student + ", your grade is " + grade + ".");
+        ioService.print(studentMapper.mapToStringWithNameSurnameOrder(student) + ", your grade is " + grade + ".");
     }
 
 
     @Override
-    public void conductQuiz() throws QuestionsReadingException, QuestionsNotFoundException {
+    public void conductQuiz() {
         Student student = studentService.askNameAndSurname();
 
-        List<Question> questions = getAllQuestions(student);
+        List<Question> questions;
+        try {
+            questions = questionService.getAllQuestions();
+        } catch (QuestionsReadingException exception) {
+            reportAboutPostponement(student);
+            exception.printStackTrace();
+            return;
+        }
 
-        greet(student, questions);
+        greet(student);
+
+        if (questions.isEmpty()) {
+            reportAboutNoQuestions();
+            return;
+        }
+
+        reportAboutQuizBeginning();
 
         int grade = askQuestionsAndCalculateGrade(questions);
 
