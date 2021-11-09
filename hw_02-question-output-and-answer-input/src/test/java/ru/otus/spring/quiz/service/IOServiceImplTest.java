@@ -15,9 +15,9 @@ class IOServiceImplTest {
         String expectedLine = "Any line";
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(expectedLine.getBytes());
-        IOService IOService = new IOServiceImpl(inputStream, System.out);
+        IOService ioService = new IOServiceImpl(inputStream, System.out);
 
-        String actualLine = IOService.scan();
+        String actualLine = ioService.scan();
 
         assertEquals(expectedLine, actualLine);
     }
@@ -27,9 +27,9 @@ class IOServiceImplTest {
         String expectedLine = "Any line";
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        IOService IOService = new IOServiceImpl(System.in, new PrintStream(outputStream));
+        IOService ioService = new IOServiceImpl(System.in, new PrintStream(outputStream));
 
-        IOService.print(expectedLine);
+        ioService.print(expectedLine);
 
         String actualLine = outputStream.toString().replace(System.lineSeparator(), "");
 
