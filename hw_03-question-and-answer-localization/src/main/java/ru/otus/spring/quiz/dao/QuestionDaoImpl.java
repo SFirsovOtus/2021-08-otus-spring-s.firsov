@@ -4,9 +4,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.quiz.config.LocaleConfig;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.exception.QuestionsReadingException;
@@ -21,19 +23,29 @@ import java.util.List;
 public class QuestionDaoImpl implements QuestionDao {
 
     private final String csvPath;
+    private final String csvPathDefault;
     private final String csvDelimiter;
 
     public QuestionDaoImpl(@Value("${resources.csv-data-storage.path}") String csvPath,
-                           @Value("${resources.csv-data-storage.delimiter}") String csvDelimiter) {
-        this.csvPath = csvPath;
+                           @Value("${resources.csv-data-storage.delimiter}") String csvDelimiter,
+                           LocaleConfig localeConfig) {
+        this.csvPath = String.format(csvPath, localeConfig.getLocaleSuffix());
+        this.csvPathDefault = String.format(csvPath, StringUtils.EMPTY);
         this.csvDelimiter = csvDelimiter;
     }
 
 
-    private String readAllCsvText(String csvPath) throws IOException {
+    private String readAllCsvText(String csvPath, String csvPathDefault) throws IOException {
         try (InputStream csvStream = new ClassPathResource(csvPath)
                 .getInputStream()) {
             return IOUtils.toString(csvStream, StandardCharsets.UTF_8);
+        } catch (IOException exception) {
+
+            try (InputStream csvStreamDefault = new ClassPathResource(csvPathDefault)
+                    .getInputStream()) {
+                return IOUtils.toString(csvStreamDefault, StandardCharsets.UTF_8);
+            }
+
         }
     }
 
@@ -77,10 +89,10 @@ public class QuestionDaoImpl implements QuestionDao {
         List<CSVRecord> csvRecords;
 
         try {
-            String csvText = readAllCsvText(this.csvPath);
+            String csvText = readAllCsvText(this.csvPath, this.csvPathDefault);
             csvRecords = convertCsvTextToRecords(csvText);
         } catch (IOException exception) {
-            throw new QuestionsReadingException(this.csvPath, exception);
+            throw new QuestionsReadingException(this.csvPath, this.csvPathDefault, exception);
         }
 
         List<Question> questions = new ArrayList<>();

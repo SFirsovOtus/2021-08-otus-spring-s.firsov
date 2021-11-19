@@ -3,23 +3,23 @@ package ru.otus.spring.quiz.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.quiz.domain.Student;
+import ru.otus.spring.quiz.facade.L10nIOFacade;
 
 @Service
 @AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final IOService ioService;
-    private final L10nService l10nService;
+    private final L10nIOFacade l10nIOFacade;
 
 
     private String askName() {
-        ioService.print(l10nService.getMessage("student.ask-name"));
-        return ioService.scan();
+        l10nIOFacade.printPropertyValue("student.ask-name");
+        return l10nIOFacade.scan();
     }
 
     private String askSurname() {
-        ioService.print(l10nService.getMessage("student.ask-surname"));
-        return ioService.scan();
+        l10nIOFacade.printPropertyValue("student.ask-surname");
+        return l10nIOFacade.scan();
     }
 
 

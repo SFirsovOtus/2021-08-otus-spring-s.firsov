@@ -17,7 +17,7 @@ public class QuestionMapper {
             sbQuestion
                     .append(System.lineSeparator())
                     .append("    ")
-                    .append(i + 1)
+                    .append(i + 1)  // "+ 1", т. к. нумерация вариантов ответа начинается с 1 в отличие от индексов списка, которые начинаются с 0
                     .append(". ")
                     .append(answerVariants.get(i).getFormulation());
         }

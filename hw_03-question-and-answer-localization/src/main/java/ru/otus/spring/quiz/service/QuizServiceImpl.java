@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.domain.Student;
 import ru.otus.spring.quiz.exception.QuestionsReadingException;
+import ru.otus.spring.quiz.facade.L10nIOFacade;
 import ru.otus.spring.quiz.mapper.StudentMapper;
 
 import java.util.List;
@@ -15,33 +16,30 @@ public class QuizServiceImpl implements QuizService {
 
     private final StudentService studentService;
     private final QuestionService questionService;
-    private final IOService ioService;
     private final InterviewerService interviewerService;
     private final StudentMapper studentMapper;
-    private final L10nService l10nService;
+    private final L10nIOFacade l10nIOFacade;
 
 
     private void reportAboutPostponement(Student student) {
-        ioService.print(System.lineSeparator() +
-                l10nService.getMessage("quiz.luck", studentMapper.mapToStringWithNameSurnameOrder(student)) +
-                System.lineSeparator() +
-                l10nService.getMessage("quiz.postponement") +
-                System.lineSeparator());
+        l10nIOFacade.print(System.lineSeparator());
+        l10nIOFacade.printPropertyValue("quiz.luck", studentMapper.mapToStringWithNameSurnameOrder(student));
+        l10nIOFacade.printPropertyValue("quiz.postponement");
+        l10nIOFacade.print(System.lineSeparator());
     }
 
     private void greet(Student student) {
-        ioService.print(System.lineSeparator() +
-                l10nService.getMessage("quiz.hello", studentMapper.mapToStringWithNameSurnameOrder(student)));
+        l10nIOFacade.print(System.lineSeparator());
+        l10nIOFacade.printPropertyValue("quiz.hello", studentMapper.mapToStringWithNameSurnameOrder(student));
     }
 
     private void reportAboutNoQuestions() {
-        ioService.print(l10nService.getMessage("quiz.no-questions") +
-                System.lineSeparator());
+        l10nIOFacade.printPropertyValue("quiz.no-questions");
     }
 
     private void reportAboutQuizBeginning() {
-        ioService.print(l10nService.getMessage("quiz.begin") +
-                System.lineSeparator());
+        l10nIOFacade.printPropertyValue("quiz.begin");
+        l10nIOFacade.print(System.lineSeparator());
     }
 
     private int askQuestionsAndCalculateGrade(List<Question> questions) {
@@ -51,9 +49,8 @@ public class QuizServiceImpl implements QuizService {
             Question askedQuestion = questions.get(i);
             interviewerService.askQuestion(i + 1, askedQuestion);  // "+ 1", т. к. нумерация вопросов начинается с 1 в отличие от индексов списка, которые начинаются с 0
             String acceptedAnswer = interviewerService.acceptAnswer();
-            ioService.print(l10nService.getMessage("quiz.answer-accepted") +
-                    System.lineSeparator() +
-                    System.lineSeparator());
+            l10nIOFacade.printPropertyValue("quiz.answer-accepted");
+            l10nIOFacade.print(System.lineSeparator());
             if (questionService.checkRightnessOfAnswerToQuestion(acceptedAnswer, askedQuestion)) {
                 grade++;
             }
@@ -63,8 +60,8 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void reportResult(Student student, int grade) {
-        ioService.print(l10nService.getMessage("quiz.your-grade",
-                studentMapper.mapToStringWithNameSurnameOrder(student), Integer.toString(grade)));
+        l10nIOFacade.printPropertyValue("quiz.your-grade",
+                studentMapper.mapToStringWithNameSurnameOrder(student), Integer.toString(grade));
     }
 
 

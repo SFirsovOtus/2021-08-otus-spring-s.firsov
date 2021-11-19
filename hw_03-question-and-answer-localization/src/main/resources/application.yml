@@ -1,6 +1,6 @@
 resources:
     csv-data-storage:
-        path: /storage/questions.csv
+        path: /storage/questions%s.csv
         delimiter: ;
 
 # чтобы выводился только баннер
@@ -12,6 +12,7 @@ logging:
 spring:
     messages:
         basename: i18n/messages
+        fallback-to-system-locale: false
 
 quiz:
     #locale: en-EN

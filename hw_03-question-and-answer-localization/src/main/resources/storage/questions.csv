@@ -1,5 +1,5 @@
-question.subject-name;question.subject-name.answer-variant.calculus;N;question.subject-name.answer-variant.strength-of-materials;Y;question.subject-name.answer-variant.cutting-and-sewing;N;question.subject-name.answer-variant.history;N
-question.teacher-name;question.teacher-name.answer-variant.father-frost;N;question.teacher-name.answer-variant.pushkin;N;question.teacher-name.answer-variant.prochnov;Y;question.teacher-name.answer-variant.excuse-me-please;N
-question.hooke-s-law
-question.material-for-bearing;question.material-for-bearing.answer-variant.wood;N;question.material-for-bearing.answer-variant.wadding;N;question.material-for-bearing.answer-variant.steel;Y
-question.more-difficult-science
+What's subject name?;Calculus;N;Strength of materials;Y;Cutting and sewing;N;History;N
+What's teacher name?;Father Frost;N;Pushkin;N;Prochnov A. B.;Y;Excuse me, please;N
+Generalized Hooke's law. Formulation and consequences
+What material is the bearing made of?;Wood. After all, no one will read it anyway;N;Wadding;N;Steel;Y
+Which science is more difficult, Strength of materials or Theoretical mechanics? Why? ))

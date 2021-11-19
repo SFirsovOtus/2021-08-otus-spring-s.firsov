@@ -8,10 +8,12 @@ import java.io.IOException;
 public class QuestionsReadingException extends IOException {
 
     private final String resourcePath;
+    private final String resourcePathDefault;
 
-    public QuestionsReadingException(String resourcePath, Throwable cause) {
-        super(String.format("Can't read resource %s", resourcePath), cause);
+    public QuestionsReadingException(String resourcePath, String resourcePathDefault, Throwable cause) {
+        super(String.format("Can't read resources %s and %s", resourcePath, resourcePathDefault), cause);
         this.resourcePath = resourcePath;
+        this.resourcePathDefault = resourcePathDefault;
     }
 
 }
