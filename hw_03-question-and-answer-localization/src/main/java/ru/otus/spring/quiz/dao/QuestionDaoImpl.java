@@ -4,14 +4,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import ru.otus.spring.quiz.config.LocaleConfig;
+import org.springframework.stereotype.Repository;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.exception.QuestionsReadingException;
+import ru.otus.spring.quiz.provider.QuestionsFileNameProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,18 +18,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Repository
 public class QuestionDaoImpl implements QuestionDao {
 
     private final String csvPath;
     private final String csvPathDefault;
     private final String csvDelimiter;
 
-    public QuestionDaoImpl(@Value("${resources.csv-data-storage.path}") String csvPath,
-                           @Value("${resources.csv-data-storage.delimiter}") String csvDelimiter,
-                           LocaleConfig localeConfig) {
-        this.csvPath = String.format(csvPath, localeConfig.getLocaleSuffix());
-        this.csvPathDefault = String.format(csvPath, StringUtils.EMPTY);
+    public QuestionDaoImpl(QuestionsFileNameProvider questionsFileNameProvider,
+                           @Value("${resources.csv-data-storage.delimiter}") String csvDelimiter) {
+        this.csvPath = questionsFileNameProvider.getResourcePath();
+        this.csvPathDefault = questionsFileNameProvider.getResourcePathDefault();
         this.csvDelimiter = csvDelimiter;
     }
 

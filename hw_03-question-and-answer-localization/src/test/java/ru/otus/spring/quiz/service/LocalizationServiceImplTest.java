@@ -13,13 +13,13 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class L10nServiceImplTest {
+class LocalizationServiceImplTest {
 
 	@MockBean
 	private MessageSource messageSource;
 
 	@Autowired
-	private L10nService l10nService;
+	private LocalizationService localizationService;
 
 
 	@Test
@@ -30,7 +30,7 @@ class L10nServiceImplTest {
 
 		doReturn(expectedMessage).when(messageSource).getMessage(eq(property), eq(new String[] {arg1, arg2}), any(Locale.class));
 
-		String actualMessage = l10nService.getMessage(property, arg1, arg2);
+		String actualMessage = localizationService.getMessage(property, arg1, arg2);
 
 		verify(messageSource, times(1)).getMessage(eq(property), eq(new String[] {arg1, arg2}), any(Locale.class));
 		assertEquals(expectedMessage, actualMessage);

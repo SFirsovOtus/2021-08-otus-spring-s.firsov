@@ -1,6 +1,6 @@
-package ru.otus.spring.quiz.facade;
+package ru.otus.spring.quiz.service;
 
-public interface L10nIOFacade {
+public interface LocalizationIOService {
 
     void print(Object object);
 

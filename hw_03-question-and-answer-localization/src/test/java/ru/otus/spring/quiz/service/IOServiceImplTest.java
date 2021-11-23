@@ -1,7 +1,7 @@
 package ru.otus.spring.quiz.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,7 +9,6 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
 class IOServiceImplTest {
 
 	@Test
@@ -33,7 +32,7 @@ class IOServiceImplTest {
 
 		ioService.print(expectedLine);
 
-		String actualLine = outputStream.toString().replace(System.lineSeparator(), "");
+		String actualLine = outputStream.toString().replace(System.lineSeparator(), StringUtils.EMPTY);
 
 		assertEquals(expectedLine, actualLine);
 	}

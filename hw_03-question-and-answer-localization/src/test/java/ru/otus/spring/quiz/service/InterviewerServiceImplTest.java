@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
-import ru.otus.spring.quiz.facade.L10nIOFacade;
 import ru.otus.spring.quiz.mapper.QuestionMapper;
 
 import java.util.Collections;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.*;
 class InterviewerServiceImplTest {
 
 	@MockBean
-	private L10nIOFacade l10nIOFacade;
+	private IOService ioService;
 	@MockBean
 	private QuestionMapper questionMapper;
 
@@ -33,23 +32,23 @@ class InterviewerServiceImplTest {
 		String someText = "Some text";
 
 		doReturn(someText).when(questionMapper).mapToStringWithQuestionNumber(questionNumber, question);
-		doNothing().when(l10nIOFacade).print(someText);
+		doNothing().when(ioService).print(someText);
 
 		interviewerService.askQuestion(questionNumber, question);
 
 		verify(questionMapper, times(1)).mapToStringWithQuestionNumber(questionNumber, question);
-		verify(l10nIOFacade, times(1)).print(someText);
+		verify(ioService, times(1)).print(someText);
 	}
 
 	@Test
 	void acceptAnswerShouldReturnEnteredAnswer() {
 		String expectedAnswer = "Any answer";
 
-		doReturn(expectedAnswer).when(l10nIOFacade).scan();
+		doReturn(expectedAnswer).when(ioService).scan();
 
 		String actualAnswer = interviewerService.acceptAnswer();
 
-		verify(l10nIOFacade, times(1)).scan();
+		verify(ioService, times(1)).scan();
 		assertEquals(expectedAnswer, actualAnswer);
 	}
 

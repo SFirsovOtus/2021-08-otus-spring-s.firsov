@@ -1,6 +1,6 @@
 package ru.otus.spring.quiz.service;
 
-public interface L10nService {
+public interface LocalizationService {
 
     String getMessage(String property, String ... args);
 

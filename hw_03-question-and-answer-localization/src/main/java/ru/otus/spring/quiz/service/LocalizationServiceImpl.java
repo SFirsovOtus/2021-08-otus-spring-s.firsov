@@ -2,12 +2,14 @@ package ru.otus.spring.quiz.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.quiz.config.LocaleConfig;
 
 @Service
+@Primary
 @AllArgsConstructor
-public class L10nServiceImpl implements L10nService {
+public class LocalizationServiceImpl implements LocalizationService {
 
     private final LocaleConfig localeConfig;
     private final MessageSource messageSource;

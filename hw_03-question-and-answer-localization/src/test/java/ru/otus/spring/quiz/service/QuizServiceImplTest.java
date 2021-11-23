@@ -8,7 +8,6 @@ import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.domain.Student;
 import ru.otus.spring.quiz.exception.QuestionsReadingException;
-import ru.otus.spring.quiz.facade.L10nIOFacade;
 import ru.otus.spring.quiz.mapper.StudentMapper;
 
 import java.util.Collections;
@@ -25,7 +24,7 @@ class QuizServiceImplTest {
 	@MockBean
 	private QuestionService questionService;
 	@MockBean
-	private L10nIOFacade l10nIOFacade;
+	private LocalizationIOService localizationIOService;
 	@MockBean
 	private InterviewerService interviewerService;
 	@MockBean
@@ -49,8 +48,8 @@ class QuizServiceImplTest {
 		verify(studentService, times(1)).askNameAndSurname();
 		verify(questionService, times(1)).getAllQuestions();
 		verify(studentMapper, times(1)).mapToStringWithNameSurnameOrder(student);
-		verify(l10nIOFacade, times(1)).printPropertyValue(anyString(), eq(studentNameSurname));
-		verify(l10nIOFacade, times(1)).printPropertyValue(anyString());
+		verify(localizationIOService, times(1)).printPropertyValue(anyString(), eq(studentNameSurname));
+		verify(localizationIOService, times(1)).printPropertyValue(anyString());
 	}
 
 	@Test
@@ -67,8 +66,8 @@ class QuizServiceImplTest {
 		verify(studentService, times(1)).askNameAndSurname();
 		verify(questionService, times(1)).getAllQuestions();
 		verify(studentMapper, times(1)).mapToStringWithNameSurnameOrder(student);
-		verify(l10nIOFacade, times(1)).printPropertyValue(anyString(), eq(studentNameSurname));
-		verify(l10nIOFacade, times(1)).printPropertyValue(anyString());
+		verify(localizationIOService, times(1)).printPropertyValue(anyString(), eq(studentNameSurname));
+		verify(localizationIOService, times(1)).printPropertyValue(anyString());
 	}
 
 	@Test
@@ -98,13 +97,13 @@ class QuizServiceImplTest {
 
 		verify(studentService, times(1)).askNameAndSurname();
 		verify(questionService, times(1)).getAllQuestions();
-		verify(l10nIOFacade, times(1)).printPropertyValue(contains("hello"), eq(studentNameSurname));
-		verify(l10nIOFacade, times(1)).printPropertyValue(contains("begin"));
+		verify(localizationIOService, times(1)).printPropertyValue(contains("hello"), eq(studentNameSurname));
+		verify(localizationIOService, times(1)).printPropertyValue(contains("begin"));
 		verify(interviewerService, times(questions.size())).askQuestion(anyInt(), any(Question.class));
 		verify(interviewerService, times(questions.size())).acceptAnswer();
-		verify(l10nIOFacade, times(questions.size())).printPropertyValue(contains("accepted"));
+		verify(localizationIOService, times(questions.size())).printPropertyValue(contains("accepted"));
 		verify(questionService, times(questions.size())).checkRightnessOfAnswerToQuestion(anyString(), any(Question.class));
-		verify(l10nIOFacade, times(1)).printPropertyValue(contains("grade"), eq(studentNameSurname), eq(grade));
+		verify(localizationIOService, times(1)).printPropertyValue(contains("grade"), eq(studentNameSurname), eq(grade));
 		verify(studentMapper, times(2)).mapToStringWithNameSurnameOrder(student);
 	}
 
