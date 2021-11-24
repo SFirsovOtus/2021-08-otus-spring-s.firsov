@@ -1,0 +1,7 @@
+${AnsiColor.BLACK}
+${AnsiBackground.YELLOW}   ___            _        ${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW}  / _ \   _   _  (_)  ____ ${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW} | | | | | | | | | | |_  / ${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW} | |_| | | |_| | | |  / /  ${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW}  \__\_\  \__,_| |_| /___| ${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW}                           ${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}
