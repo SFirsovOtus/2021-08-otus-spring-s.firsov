@@ -18,27 +18,8 @@ public class ShellCommandServiceImpl implements ShellCommandService {
     private final StudentService studentService;
     private final QuizService quizService;
 
+
     private Student loggedInStudent;
-
-    private boolean existsLoggedInUser() {
-        return this.loggedInStudent != null;
-    }
-
-    private Availability needToLogin() {
-        if(!existsLoggedInUser()) {
-            return Availability.available();
-        } else {
-            return Availability.unavailable(quizService.reportThatAlreadyIntroducedYourself(this.loggedInStudent));
-        }
-    }
-
-    private Availability canBegin() {
-        if(existsLoggedInUser()) {
-            return Availability.available();
-        } else {
-            return Availability.unavailable(quizService.reportThatNeedToIntroduceYourself());
-        }
-    }
 
     @Override
     @ShellMethod(value = "Login command (need to enter name and surname)", key = "login")
@@ -60,6 +41,26 @@ public class ShellCommandServiceImpl implements ShellCommandService {
     @ShellMethodAvailability("canBegin")
     public void begin() {
         quizService.conductQuiz(this.loggedInStudent);
+    }
+
+    private boolean existsLoggedInUser() {
+        return this.loggedInStudent != null;
+    }
+
+    private Availability needToLogin() {
+        if(!existsLoggedInUser()) {
+            return Availability.available();
+        } else {
+            return Availability.unavailable(quizService.reportThatAlreadyIntroducedYourself(this.loggedInStudent));
+        }
+    }
+
+    private Availability canBegin() {
+        if(existsLoggedInUser()) {
+            return Availability.available();
+        } else {
+            return Availability.unavailable(quizService.reportThatNeedToIntroduceYourself());
+        }
     }
 
 }

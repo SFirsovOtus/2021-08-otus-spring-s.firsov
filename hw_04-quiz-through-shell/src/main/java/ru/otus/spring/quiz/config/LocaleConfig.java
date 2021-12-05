@@ -3,12 +3,12 @@ package ru.otus.spring.quiz.config;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Getter
-@Configuration
+@Component
 public class LocaleConfig {
 
     private final Locale locale;

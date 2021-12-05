@@ -1,10 +1,10 @@
 package ru.otus.spring.quiz.config;
 
 import org.jline.utils.AttributedString;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.PromptProvider;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class CommandLineInterfaceConfig implements PromptProvider {
 
     public static final String SHELL_COMMAND_GROUP_QUIZ_COMMANDS = "Quiz Commands";
