@@ -1,0 +1,11 @@
+resources:
+  csv-data-storage:
+    path: /storage/questions%s.csv
+    delimiter: ;
+
+spring:
+  messages:
+    basename: i18n/messages
+  shell:
+    interactive:
+      enabled: false

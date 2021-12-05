@@ -1,0 +1,19 @@
+resources:
+    csv-data-storage:
+        path: /storage/questions%s.csv
+        delimiter: ;
+
+# чтобы выводился только баннер
+# (без лога с INFO-строками)
+logging:
+    level:
+        root: error
+
+spring:
+    messages:
+        basename: i18n/messages
+        fallback-to-system-locale: false
+
+quiz:
+    #locale: en-EN
+    locale: ru-RU
