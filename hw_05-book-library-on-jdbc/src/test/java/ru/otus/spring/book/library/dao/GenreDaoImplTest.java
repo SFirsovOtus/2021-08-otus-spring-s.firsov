@@ -7,26 +7,34 @@ import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.book.library.domain.Genre;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
 @JdbcTest
-@Import(GenreDaoImpl.class)
+@Import(value = {GenreDaoImpl.class, BookDaoImpl.class})
 class GenreDaoImplTest {
 
 	@Autowired
 	private GenreDao genreDao;
 
+	@Autowired
+	private BookDao bookDao;
+
 	private final List<Genre> genres = List.of(
-			new Genre(1L, "Фантастика"),
-			new Genre(2L, "Философия"),
-			new Genre(3L, "Компьютерная литература")
+			new Genre().setId(1L).setName("Фантастика"),
+			new Genre().setId(2L).setName("Философия"),
+			new Genre().setId(3L).setName("Компьютерная литература")
 	);
+
 
 	@Test
 	void getAllShouldReturnExpectedGenreList() {
-		List<Genre> actualGenres = genreDao.getAll();
+		List<Genre> actualGenres = genreDao.getAll().stream()
+				.sorted(Comparator.comparing(Genre::getId))
+				.collect(Collectors.toList());
 
 		assertThat(actualGenres)
 				.usingRecursiveFieldByFieldElementComparator()
@@ -44,20 +52,27 @@ class GenreDaoImplTest {
 
 	@Test
 	void insertShouldReturnInsertedGenre() {
-		long genreId = 123L;
-		Genre insertedGenre = new Genre(genreId, "New genre");
+		Genre insertedGenre = new Genre()
+				.setName("New genre");
 
 		genreDao.insert(insertedGenre);
-		Genre actualGenre = genreDao.getById(genreId);
+		String actualGenreName = genreDao.getAll().stream()
+				.map(Genre::getName)
+				.filter(genreName -> genreName.equals(insertedGenre.getName()))
+				.findFirst()
+				.orElse(null);
 
-		assertThat(actualGenre)
-				.usingRecursiveComparison()
-				.isEqualTo(insertedGenre);
+		assertThat(actualGenreName).isEqualTo(insertedGenre.getName());
 	}
 
 	@Test
 	void deleteByIdShouldDeleteSpecifiedGenre() {
 		long genreId = 1L;
+
+		// удалим все книги, чтобы не мешали внешние ключи
+		bookDao.getAll()
+				.forEach(book -> bookDao.deleteById(book.getId()));
+
 
 		assertThatCode(() -> genreDao.getById(genreId))
 				.doesNotThrowAnyException();

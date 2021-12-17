@@ -40,9 +40,9 @@ public class ShellCommandServiceImpl implements ShellCommandService {
     }
 
     @Override
-    @ShellMethod(value = "Add one book with ID, name, author ID and genre ID", key = {"add-one-book", "aob"})
-    public void addOneBook(long id, String name, long authorId, long genreId) {
-        bookService.add(new Book(id, name, authorId, genreId));
+    @ShellMethod(value = "Add one book with name", key = {"add-one-book", "aob"})
+    public void addOneBook(String bookName) {
+        bookService.add(new Book().setName(bookName));
         ioService.print("Book added.");
     }
 
@@ -55,22 +55,22 @@ public class ShellCommandServiceImpl implements ShellCommandService {
 
     @Override
     @ShellMethod(value = "Change book name by book ID", key = {"change-book-name", "cbn"})
-    public void changeBookName(long id, String name) {
-        bookService.changeNameById(id, name);
+    public void changeBookName(long id, String bookName) {
+        bookService.changeNameById(id, bookName);
         ioService.print("Book changed.");
     }
 
     @Override
     @ShellMethod(value = "Change book author ID by book ID", key = {"change-book-author", "cba"})
     public void changeBookAuthorId(long id, long authorId) {
-        bookService.changeAuthorIdById(id, authorId);
+        bookService.changeAuthorIdById(id, new Author().setId(authorId));
         ioService.print("Book changed.");
     }
 
     @Override
     @ShellMethod(value = "Change book genre ID by book ID", key = {"change-book-genre", "cbg"})
     public void changeBookGenreId(long id, long genreId) {
-        bookService.changeGenreIdById(id, genreId);
+        bookService.changeGenreIdById(id, new Genre().setId(genreId));
         ioService.print("Book changed.");
     }
 
@@ -90,9 +90,9 @@ public class ShellCommandServiceImpl implements ShellCommandService {
     }
 
     @Override
-    @ShellMethod(value = "Add one author with ID and name", key = {"add-one-author", "aoa"})
-    public void addOneAuthor(long id, String name) {
-        authorService.add(new Author(id, name));
+    @ShellMethod(value = "Add one author with name", key = {"add-one-author", "aoa"})
+    public void addOneAuthor(String authorName) {
+        authorService.add(new Author().setName(authorName));
         ioService.print("Author added.");
     }
 
@@ -119,9 +119,9 @@ public class ShellCommandServiceImpl implements ShellCommandService {
     }
 
     @Override
-    @ShellMethod(value = "Add one genre with ID and name", key = {"add-one-genre", "aog"})
-    public void addOneGenre(long id, String name) {
-        genreService.add(new Genre(id, name));
+    @ShellMethod(value = "Add one genre with name", key = {"add-one-genre", "aog"})
+    public void addOneGenre(String genreName) {
+        genreService.add(new Genre().setName(genreName));
         ioService.print("Genre added.");
     }
 

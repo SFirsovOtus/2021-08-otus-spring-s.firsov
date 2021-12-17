@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
+import ru.otus.spring.book.library.domain.Author;
 import ru.otus.spring.book.library.domain.Book;
+import ru.otus.spring.book.library.domain.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,14 +22,9 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public void insert(Book book) {
-        Map<String, Object> params = Map.of(
-                "id", book.getId(),
-                "name", book.getName(),
-                "author_id", book.getAuthorId(),
-                "genre_id", book.getGenreId()
-        );
+        Map<String, Object> params = Map.of("name", book.getName());
         namedParameterJdbcOperations.update(
-                "insert into books (id, name, author_id, genre_id) values (:id, :name, :author_id, :genre_id)",
+                "insert into books (name) values (:name)",
                 params);
     }
 
@@ -43,10 +40,10 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void updateAuthorIdById(long id, long authorId) {
+    public void updateAuthorIdById(long id, Author author) {
         Map<String, Object> params = Map.of(
                 "id", id,
-                "author_id", authorId
+                "author_id", author.getId()
         );
         namedParameterJdbcOperations.update(
                 "update books set author_id = :author_id where id = :id",
@@ -54,10 +51,10 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void updateGenreIdById(long id, long genreId) {
+    public void updateGenreIdById(long id, Genre genre) {
         Map<String, Object> params = Map.of(
                 "id", id,
-                "genre_id", genreId
+                "genre_id", genre.getId()
         );
         namedParameterJdbcOperations.update(
                 "update books set genre_id = :genre_id where id = :id",
@@ -68,20 +65,27 @@ public class BookDaoImpl implements BookDao {
     public Book getById(long id) {
         Map<String, Object> params = Map.of("id", id);
         return namedParameterJdbcOperations
-                .queryForObject("select * from books where id = :id", params, new BookMapper());
+                .queryForObject("select b.id, b.name, a.id as author_id, a.name as author_name, g.id as genre_id, g.name as genre_name" +
+                        " from books b" +
+                        " left join authors a on a.id = b.author_id" +
+                        " left join genres g on g.id = b.genre_id" +
+                        " where b.id = :id", params, new BookMapper());
     }
 
     @Override
     public List<Book> getAll() {
         return namedParameterJdbcOperations.getJdbcOperations()
-                .query("select * from books", new BookMapper());
+                .query("select b.id, b.name, a.id as author_id, a.name as author_name, g.id as genre_id, g.name as genre_name" +
+                        " from books b" +
+                        " left join authors a on a.id = b.author_id" +
+                        " left join genres g on g.id = b.genre_id", new BookMapper());
     }
 
     @Override
     public void deleteById(long id) {
         Map<String, Object> params = Map.of("id", id);
         namedParameterJdbcOperations
-                .update("delete from books where id = :id" , params);
+                .update("delete from books where id = :id", params);
     }
 
 
@@ -89,12 +93,19 @@ public class BookDaoImpl implements BookDao {
 
         @Override
         public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Book(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getLong("author_id"),
-                    rs.getLong("genre_id")
-            );
+            Author author = new Author()
+                    .setId(rs.getLong("author_id"))
+                    .setName(rs.getString("author_name"));
+
+            Genre genre = new Genre()
+                    .setId(rs.getLong("genre_id"))
+                    .setName(rs.getString("genre_name"));
+
+            return new Book()
+                    .setId(rs.getLong("id"))
+                    .setName(rs.getString("name"))
+                    .setAuthor(author)
+                    .setGenre(genre);
         }
 
     }

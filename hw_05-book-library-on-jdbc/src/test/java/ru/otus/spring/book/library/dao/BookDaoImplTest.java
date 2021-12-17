@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
+import ru.otus.spring.book.library.domain.Author;
 import ru.otus.spring.book.library.domain.Book;
+import ru.otus.spring.book.library.domain.Genre;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,16 +22,24 @@ class BookDaoImplTest {
 	@Autowired
 	private BookDao bookDao;
 
+	private final Author author1 = new Author().setId(1L).setName("Братья Стругацкие");
+	private final Author author2 = new Author().setId(2L).setName("Эндрю Таненбаум");
+
+	private final Genre genre1 = new Genre().setId(1L).setName("Фантастика");
+	private final Genre genre3 = new Genre().setId(3L).setName("Компьютерная литература");
+
 	private final List<Book> books = List.of(
-			new Book(1L, "Пикник на обочине", 1L, 1L),
-			new Book(2L, "Жук в муравейнике", 1L, 1L),
-			new Book(3L, "Современные операционные системы", 2L, 3L)
+			new Book().setId(1L).setName("Пикник на обочине").setAuthor(author1).setGenre(genre1),
+			new Book().setId(2L).setName("Жук в муравейнике").setAuthor(author1).setGenre(genre1),
+			new Book().setId(3L).setName("Современные операционные системы").setAuthor(author2).setGenre(genre3)
 	);
 
 
 	@Test
 	void getAllShouldReturnExpectedBookList() {
-		List<Book> actualBooks = bookDao.getAll();
+		List<Book> actualBooks = bookDao.getAll().stream()
+				.sorted(Comparator.comparing(Book::getId))
+				.collect(Collectors.toList());
 
 		assertThat(actualBooks)
 				.usingRecursiveFieldByFieldElementComparator()
@@ -45,15 +57,17 @@ class BookDaoImplTest {
 
 	@Test
 	void insertShouldReturnInsertedBook() {
-		long bookId = 123L;
-		Book insertedBook = new Book(bookId, "New book", 456L, 789L);
+		Book insertedBook = new Book()
+				.setName("New book");
 
 		bookDao.insert(insertedBook);
-		Book actualBook = bookDao.getById(bookId);
+		String actualBookName = bookDao.getAll().stream()
+				.map(Book::getName)
+				.filter(bookName -> bookName.equals(insertedBook.getName()))
+				.findFirst()
+				.orElse(null);
 
-		assertThat(actualBook)
-				.usingRecursiveComparison()
-				.isEqualTo(insertedBook);
+		assertThat(actualBookName).isEqualTo(insertedBook.getName());
 	}
 
 	@Test
@@ -85,30 +99,28 @@ class BookDaoImplTest {
 
 	@Test
 	void updateAuthorIdByIdShouldUpdateAuthorIdOfSpecifiedBook() {
-		long bookId = 2L;
-		long newAuthorId = 123L;
+		long bookId = 3L;
 
-		long actualAuthorId = bookDao.getById(bookId).getAuthorId();
-		assertThat(actualAuthorId).isNotEqualTo(newAuthorId);
+		long actualAuthorId = bookDao.getById(bookId).getAuthor().getId();
+		assertThat(actualAuthorId).isNotEqualTo(author1.getId());
 
-		bookDao.updateAuthorIdById(bookId, newAuthorId);
+		bookDao.updateAuthorIdById(bookId, author1);
 
-		actualAuthorId = bookDao.getById(bookId).getAuthorId();
-		assertThat(actualAuthorId).isEqualTo(newAuthorId);
+		actualAuthorId = bookDao.getById(bookId).getAuthor().getId();
+		assertThat(actualAuthorId).isEqualTo(author1.getId());
 	}
 
 	@Test
 	void updateGenreIdByIdShouldUpdateGenreIdOfSpecifiedBook() {
-		long bookId = 2L;
-		long newGenreId = 123L;
+		long bookId = 3L;
 
-		long actualGenreId = bookDao.getById(bookId).getGenreId();
-		assertThat(actualGenreId).isNotEqualTo(newGenreId);
+		long actualGenreId = bookDao.getById(bookId).getGenre().getId();
+		assertThat(actualGenreId).isNotEqualTo(genre1.getId());
 
-		bookDao.updateGenreIdById(bookId, newGenreId);
+		bookDao.updateGenreIdById(bookId, genre1);
 
-		actualGenreId = bookDao.getById(bookId).getGenreId();
-		assertThat(actualGenreId).isEqualTo(newGenreId);
+		actualGenreId = bookDao.getById(bookId).getGenre().getId();
+		assertThat(actualGenreId).isEqualTo(genre1.getId());
 	}
 
 }

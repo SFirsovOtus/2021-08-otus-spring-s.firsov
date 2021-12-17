@@ -6,7 +6,7 @@ public interface ShellCommandService {
 
     void showOneBook(long id);
 
-    void addOneBook(long id, String name, long authorId, long genreId);
+    void addOneBook(String bookName);
 
     void removeOneBook(long id);
 
@@ -21,7 +21,7 @@ public interface ShellCommandService {
 
     void showOneAuthor(long id);
 
-    void addOneAuthor(long id, String name);
+    void addOneAuthor(String authorName);
 
     void removeOneAuthor(long id);
 
@@ -30,7 +30,7 @@ public interface ShellCommandService {
 
     void showOneGenre(long id);
 
-    void addOneGenre(long id, String name);
+    void addOneGenre(String genreName);
 
     void removeOneGenre(long id);
 

@@ -20,12 +20,9 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public void insert(Author author) {
-        Map<String, Object> params = Map.of(
-                "id", author.getId(),
-                "name", author.getName()
-        );
+        Map<String, Object> params = Map.of("name", author.getName());
         namedParameterJdbcOperations.update(
-                "insert into authors (id, name) values (:id, :name)",
+                "insert into authors (name) values (:name)",
                 params);
     }
 
@@ -33,20 +30,20 @@ public class AuthorDaoImpl implements AuthorDao {
     public Author getById(long id) {
         Map<String, Object> params = Map.of("id", id);
         return namedParameterJdbcOperations
-                .queryForObject("select * from authors where id = :id", params, new AuthorMapper());
+                .queryForObject("select id, name from authors where id = :id", params, new AuthorMapper());
     }
 
     @Override
     public List<Author> getAll() {
         return namedParameterJdbcOperations.getJdbcOperations()
-                .query("select * from authors", new AuthorMapper());
+                .query("select id, name from authors", new AuthorMapper());
     }
 
     @Override
     public void deleteById(long id) {
         Map<String, Object> params = Map.of("id", id);
         namedParameterJdbcOperations
-                .update("delete from authors where id = :id" , params);
+                .update("delete from authors where id = :id", params);
     }
 
 
@@ -54,10 +51,9 @@ public class AuthorDaoImpl implements AuthorDao {
 
         @Override
         public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Author(
-                    rs.getLong("id"),
-                    rs.getString("name")
-            );
+            return new Author()
+                    .setId(rs.getLong("id"))
+                    .setName(rs.getString("name"));
         }
 
     }

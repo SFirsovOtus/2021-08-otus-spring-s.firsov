@@ -2,19 +2,23 @@ package ru.otus.spring.book.library.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
 @ToString
 @Getter
+@Setter
+@Accessors(chain = true)
 public class Book {
 
-    private final long id;
+    private Long id;
 
-    private final String name;
+    private String name;
 
-    private final long authorId;
+    private Author author;
 
-    private final long genreId;
+    private Genre genre;
 
 }

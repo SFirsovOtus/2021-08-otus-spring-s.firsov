@@ -20,12 +20,9 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public void insert(Genre genre) {
-        Map<String, Object> params = Map.of(
-                "id", genre.getId(),
-                "name", genre.getName()
-        );
+        Map<String, Object> params = Map.of("name", genre.getName());
         namedParameterJdbcOperations.update(
-                "insert into genres (id, name) values (:id, :name)",
+                "insert into genres (name) values (:name)",
                 params);
     }
 
@@ -33,20 +30,20 @@ public class GenreDaoImpl implements GenreDao {
     public Genre getById(long id) {
         Map<String, Object> params = Map.of("id", id);
         return namedParameterJdbcOperations
-                .queryForObject("select * from genres where id = :id", params, new GenreMapper());
+                .queryForObject("select id, name from genres where id = :id", params, new GenreMapper());
     }
 
     @Override
     public List<Genre> getAll() {
         return namedParameterJdbcOperations.getJdbcOperations()
-                .query("select * from genres", new GenreMapper());
+                .query("select id, name from genres", new GenreMapper());
     }
 
     @Override
     public void deleteById(long id) {
         Map<String, Object> params = Map.of("id", id);
         namedParameterJdbcOperations
-                .update("delete from genres where id = :id" , params);
+                .update("delete from genres where id = :id", params);
     }
 
 
@@ -54,10 +51,9 @@ public class GenreDaoImpl implements GenreDao {
 
         @Override
         public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Genre(
-                    rs.getLong("id"),
-                    rs.getString("name")
-            );
+            return new Genre()
+                    .setId(rs.getLong("id"))
+                    .setName(rs.getString("name"));
         }
 
     }

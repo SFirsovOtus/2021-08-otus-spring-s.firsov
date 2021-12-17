@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.spring.book.library.dao.BookDao;
+import ru.otus.spring.book.library.domain.Author;
 import ru.otus.spring.book.library.domain.Book;
+import ru.otus.spring.book.library.domain.Genre;
 
 import static org.mockito.Mockito.*;
 
@@ -18,7 +20,17 @@ class BookServiceImplTest {
 	@Autowired
 	private BookService bookService;
 
-	private final Book anyBook = new Book(123L, "Any book", 456L, 789L);
+  private final Author anyAuthor = new Author()
+			.setId(456L)
+			.setName("Any author");
+	private final Genre anyGenre = new Genre()
+			.setId(789L)
+			.setName("Any genre");;
+	private final Book anyBook = new Book()
+			.setId(123L)
+			.setName("Any book")
+			.setAuthor(anyAuthor)
+			.setGenre(anyGenre);
 
 
 	@Test
@@ -64,17 +76,17 @@ class BookServiceImplTest {
 	@Test
 	void changeAuthorIdByIdShouldCallUpdateAuthorIdByIdOfBookDao() {
 
-		bookService.changeAuthorIdById(anyBook.getId(), anyBook.getAuthorId());
+		bookService.changeAuthorIdById(anyBook.getId(), anyBook.getAuthor());
 
-		verify(bookDao, times(1)).updateAuthorIdById(anyBook.getId(), anyBook.getAuthorId());
+		verify(bookDao, times(1)).updateAuthorIdById(anyBook.getId(), anyBook.getAuthor());
 	}
 
 	@Test
 	void changeGenreIdByIdShouldCallUpdateGenreIdByIdOfBookDao() {
 
-		bookService.changeGenreIdById(anyBook.getId(), anyBook.getGenreId());
+		bookService.changeGenreIdById(anyBook.getId(), anyBook.getGenre());
 
-		verify(bookDao, times(1)).updateGenreIdById(anyBook.getId(), anyBook.getGenreId());
+		verify(bookDao, times(1)).updateGenreIdById(anyBook.getId(), anyBook.getGenre());
 	}
 
 }

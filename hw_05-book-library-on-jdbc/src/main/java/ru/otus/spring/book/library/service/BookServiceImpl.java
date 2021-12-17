@@ -3,7 +3,9 @@ package ru.otus.spring.book.library.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.book.library.dao.BookDao;
+import ru.otus.spring.book.library.domain.Author;
 import ru.otus.spring.book.library.domain.Book;
+import ru.otus.spring.book.library.domain.Genre;
 
 import java.util.List;
 
@@ -25,13 +27,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void changeAuthorIdById(long id, long authorId) {
-        bookDao.updateAuthorIdById(id, authorId);
+    public void changeAuthorIdById(long id, Author author) {
+        bookDao.updateAuthorIdById(id, author);
     }
 
     @Override
-    public void changeGenreIdById(long id, long genreId) {
-        bookDao.updateGenreIdById(id, genreId);
+    public void changeGenreIdById(long id, Genre genre) {
+        bookDao.updateGenreIdById(id, genre);
     }
 
     @Override
