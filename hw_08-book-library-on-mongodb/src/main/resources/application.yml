@@ -1,0 +1,23 @@
+spring:
+  main:
+    banner-mode: off
+    allow-circular-references: true
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: book_library
+
+  shell:
+    interactive:
+      enabled: true
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.book.library.changelog
+
+logging:
+  level:
+    root: error
