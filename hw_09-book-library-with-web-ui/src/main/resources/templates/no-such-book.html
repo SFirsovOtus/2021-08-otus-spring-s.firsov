@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>No such book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        h1 {
+            color: red;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1>No such book</h1>
+<br/>
+<br/>
+<a th:href="@{${url_books}}" href="books.html">Show all books</a>
+
+</body>
+
+
+</html>

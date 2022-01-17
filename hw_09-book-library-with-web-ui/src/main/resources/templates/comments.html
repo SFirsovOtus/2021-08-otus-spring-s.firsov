@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of comments</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .comments, .comments td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+
+        .book, .book td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1>Book:</h1>
+<table class="book">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Genres</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${book}">
+        <td th:text="*{id}">book_id</td>
+        <td th:text="*{name}">book_name</td>
+        <td th:text="*{author.name}">author_name</td>
+        <td th:text="*{@toStringService.convertGenreNamesToStringWithAscendingOrderByNameSeparatedByCommas(genres)}">genres</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 th:if="${comments.isEmpty()}">No comments</h3>
+<h3 th:if="${!comments.isEmpty()}">Comments:</h3>
+<table class="comments" th:if="${!comments.isEmpty()}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Text</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${comment}" th:each="comment : ${comments}">
+        <td th:text="*{id}">comment_id</td>
+        <td th:text="*{text}">comment_text</td>
+        <td>
+            <form id="delete-form" th:action="@{${url_delete_comment}(${param_comment_id}=*{id})}" th:method="post" action="comments.html">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br th:if="${!comments.isEmpty()}" />
+<td>
+    <a th:href="@{${url_add_comment}(${param_book_id}=${book.id})}" href="add-comment.html">Add comment</a>
+</td>
+<br/>
+<br/>
+<td>
+    <a th:href="@{${url_books}}" href="books.html">Show all books</a>
+</td>
+</body>
+
+
+</html>
