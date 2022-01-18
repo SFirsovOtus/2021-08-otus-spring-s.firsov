@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books, .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+</body>
+<script th:inline="javascript">
+    const uri_books = [[${uri_books}]];
+    const url_add_book = [[${url_add_book}]];
+    const url_comments = [[${url_comments}]];
+    const url_delete_book = [[${url_delete_book}]];
+    const param_book_id = [[${param_book_id}]];
+
+    $(function () {
+        $.get(uri_books).done(function (books) {
+
+            function composeBodyWithTable(books) {
+                let bodyWithTable = '';
+
+                for (let i = 0; i < books.length; i++) {
+
+                    let genres = [];
+                    let genreDtos = books[i].genreDtos;
+                    for (let j = 0; j < genreDtos.length; j++) {
+                        genres.push(genreDtos[j].name);
+                    }
+                    genres = genres.sort().join(', ');
+
+                    // сборка строк таблицы
+                    bodyWithTable = bodyWithTable +
+                        '<tr>' +
+                        '    <td>' + books[i].id + '</td>' +
+                        '    <td>' + books[i].name + '</td>' +
+                        '    <td>' + books[i].authorDto.name + '</td>' +
+                        '    <td>' + genres + '</td>' +
+                        '    <td>' + '<a href="' + url_comments + '?' + param_book_id + '=' + books[i].id + '">Show comments</a>' + '</td>'  +
+                        '    <td>' +
+                        '        <form action="' + url_delete_book + '?' + param_book_id + '=' + books[i].id + '" method="post">' +
+                        '            <button type="submit">Delete</button>' +
+                        '        </form>' +
+                        '    </td>' +
+                        '</tr>';
+                }
+
+                // добавление самой таблицы и названия столбцов вокруг строк
+                if (!jQuery.isEmptyObject(books)) {
+                    bodyWithTable =
+                        '<table class="books">' +
+                        '    <thead>' +
+                        '    <tr>' +
+                        '        <th>ID</th>' +
+                        '        <th>Name</th>' +
+                        '        <th>Author</th>' +
+                        '        <th>Genres</th>' +
+                        '    </tr>' +
+                        '    </thead>' +
+                        '    <tbody>' +
+                        bodyWithTable  +
+                        '    </tbody>' +
+                        '</table>'
+                }
+
+                // добавление заголовка в начале и ссылок на другие страницы в конце
+                bodyWithTable = '<h1>' + (jQuery.isEmptyObject(books) ? 'No books' : 'Books:') + '</h1>' + bodyWithTable +
+                    (jQuery.isEmptyObject(books) ? '' : '<br/>') +
+                    '<td>' + '<a href="' + url_add_book + '">Add book</a>' + '</td>';
+
+                return bodyWithTable;
+            }
+
+            $('body').append(composeBodyWithTable(books))
+        })
+    });
+</script>
+
+
+</html>
