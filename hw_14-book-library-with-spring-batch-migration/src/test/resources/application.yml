@@ -1,0 +1,33 @@
+spring:
+  batch:
+    job:
+      enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    data: test-data.sql
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+  mongodb:
+    embedded:
+      version: 3.4.0
+  data:
+    mongodb:
+      port: 0
+      database: test
+
+mongock:
+  runner-type: "ApplicationRunner"
+  change-logs-scan-package:
+    - ru.otus.spring.book.library.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
