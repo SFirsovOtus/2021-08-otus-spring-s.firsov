@@ -67,7 +67,15 @@ insert into comments (id, book_id, text) values (12, 9, 'Лаконичная, �
 insert into comments (id, book_id, text) values (13, 12, 'Решила почитать известный труд известного философа, но не поняла ровным счётом ничего');
 insert into comments (id, book_id, text) values (14, 12, 'Пробираться сквозь понятия было трудно без предварительного прочтения "Критики чистого разума"');
 
-insert into users (id, name, password, role) values (1, 'admin', 'admin123', 'ADMIN');
-insert into users (id, name, password, role) values (2, 'librarian', 'librarian123', 'LIBRARIAN');
-insert into users (id, name, password, role) values (3, 'reader', 'reader123', 'READER');
-insert into users (id, name, password, role) values (4, 'guest', 'guest123', 'GUEST');
+
+
+insert into users (username, password) values ('admin', 'admin123');
+insert into users (username, password) values ('librarian', 'librarian123');
+insert into users (username, password) values ('reader', 'reader123');
+insert into users (username, password) values ('guest', 'guest123');
+
+insert into roles (username, role) values ('admin', 'ADMIN');
+insert into roles (username, role) values ('librarian', 'LIBRARIAN');
+insert into roles (username, role) values ('reader', 'READER');
+insert into roles (username, role) values ('reader', 'REVIEWER');
+insert into roles (username, role) values ('guest', 'GUEST');
