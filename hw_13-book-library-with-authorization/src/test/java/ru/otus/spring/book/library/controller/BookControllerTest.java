@@ -84,7 +84,7 @@ class BookControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfAnyUser, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void anyUserShouldAuthenticateToUrlBooks() throws Exception {
+    void anyUserShouldAuthorizeToUrlBooks() throws Exception {
         mockMvc.perform(get(URL_BOOKS))
                 .andExpect(status().isOk());
     }
@@ -92,7 +92,7 @@ class BookControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfLibrarian, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void librarianShouldAuthenticateToUrlDeleteBook() throws Exception {
+    void librarianShouldAuthorizeToUrlDeleteBook() throws Exception {
         mockMvc.perform(post(URL_DELETE_BOOK + "?" + PARAM_BOOK_ID + "=123").with(csrf()))
                 .andExpect(status().isOk());
     }
@@ -100,14 +100,14 @@ class BookControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfLibrarian, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void librarianShouldAuthenticateToUrlAddBook() throws Exception {
+    void librarianShouldAuthorizeToUrlAddBook() throws Exception {
         mockMvc.perform(get(URL_ADD_BOOK))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails(value = usernameOfAdmin, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void adminShouldAuthenticateToUrlAddBook() throws Exception {
+    void adminShouldAuthorizeToUrlAddBook() throws Exception {
         mockMvc.perform(get(URL_ADD_BOOK))
                 .andExpect(status().isOk());
     }
@@ -115,7 +115,7 @@ class BookControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfLibrarian, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void librarianShouldAuthenticateToUrlSaveBook() throws Exception {
+    void librarianShouldAuthorizeToUrlSaveBook() throws Exception {
         mockMvc.perform(post(URL_SAVE_BOOK + "?book=\"Any book\"&author=\"Any author\"&genres=\"Any genres\"").with(csrf()))
                 .andExpect(status().isFound());
     }

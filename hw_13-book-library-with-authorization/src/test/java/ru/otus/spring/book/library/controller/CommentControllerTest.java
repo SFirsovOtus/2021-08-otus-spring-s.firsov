@@ -71,28 +71,28 @@ class CommentControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfAdmin, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void adminShouldAuthenticateToUrlComments() throws Exception {
+    void adminShouldAuthorizeToUrlComments() throws Exception {
         mockMvc.perform(get(URL_COMMENTS + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails(value = usernameOfLibrarian, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void librarianShouldAuthenticateToUrlComments() throws Exception {
+    void librarianShouldAuthorizeToUrlComments() throws Exception {
         mockMvc.perform(get(URL_COMMENTS + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails(value = usernameOfReader, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void readerShouldAuthenticateToUrlComments() throws Exception {
+    void readerShouldAuthorizeToUrlComments() throws Exception {
         mockMvc.perform(get(URL_COMMENTS + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails(value = usernameOfGuest, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void guestShouldAuthenticateToUrlComments() throws Exception {
+    void guestShouldAuthorizeToUrlComments() throws Exception {
         mockMvc.perform(get(URL_COMMENTS + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
@@ -100,7 +100,7 @@ class CommentControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfLibrarian, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void librarianShouldAuthenticateToUrlDeleteComment() throws Exception {
+    void librarianShouldAuthorizeToUrlDeleteComment() throws Exception {
         mockMvc.perform(post(URL_DELETE_COMMENT + "?" + PARAM_COMMENT_ID + "=123").with(csrf()))
                 .andExpect(status().isOk());
     }
@@ -108,14 +108,14 @@ class CommentControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfReader, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void readerShouldAuthenticateToUrlAddComment() throws Exception {
+    void readerShouldAuthorizeToUrlAddComment() throws Exception {
         mockMvc.perform(get(URL_ADD_COMMENT + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails(value = usernameOfAdmin, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void adminShouldAuthenticateToUrlAddComment() throws Exception {
+    void adminShouldAuthorizeToUrlAddComment() throws Exception {
         mockMvc.perform(get(URL_ADD_COMMENT + "?" + PARAM_BOOK_ID + "=123"))
                 .andExpect(status().isOk());
     }
@@ -123,7 +123,7 @@ class CommentControllerTest {
 
     @Test
     @WithUserDetails(value = usernameOfReader, userDetailsServiceBeanName = "libraryUserDetailsService")
-    void readerShouldAuthenticateToUrlSaveComment() throws Exception {
+    void readerShouldAuthorizeToUrlSaveComment() throws Exception {
         mockMvc.perform(post(URL_SAVE_COMMENT + "?" + PARAM_BOOK_ID  + "=123&text=\"Any text\"").with(csrf()))
                 .andExpect(status().isFound());
     }
