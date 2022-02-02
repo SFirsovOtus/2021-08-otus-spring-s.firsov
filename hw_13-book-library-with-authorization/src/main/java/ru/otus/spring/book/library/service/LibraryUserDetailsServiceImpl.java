@@ -22,11 +22,7 @@ public class LibraryUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LibraryUser libraryUser = libraryUserRepository.findByUsername(username)
-                .orElse(null);
-
-        if (libraryUser == null) {
-            throw new UsernameNotFoundException(username);
-        }
+                .orElseThrow(() -> new UsernameNotFoundException(username));
 
         String[] roles = libraryUser.getLibraryRoles().stream()
                 .map(LibraryRole::getRole)
