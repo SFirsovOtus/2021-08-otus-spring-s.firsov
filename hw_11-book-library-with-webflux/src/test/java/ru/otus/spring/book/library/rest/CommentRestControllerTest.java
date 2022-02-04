@@ -22,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static ru.otus.spring.book.library.rest.CommentRestController.*;
 
-@WebFluxTest(controllers = CommentRestController.class)
+@WebFluxTest(CommentRestController.class)
 class CommentRestControllerTest {
 
     @Autowired
