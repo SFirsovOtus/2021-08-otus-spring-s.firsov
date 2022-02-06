@@ -1,0 +1,14 @@
+spring:
+  main:
+    banner-mode: off
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: book_library
+
+logging:
+  level:
+    root: info
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: info
