@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add early payment</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<form id="add-form" th:action="@{${url_save_schedule}(${param_credit_id}=*{creditId})}" th:method="post" action="add-early-payment.html">
+    <div class="row">
+        <label for="date-input">Date:</label>
+        <input id="date-input" name="date" type="text" value="2022-02-28" />
+    </div>
+    <div class="row">
+        <label for="payment-amount-input">Payment amount:</label>
+        <input id="payment-amount-input" name="amount" type="text" value="123456.78" />
+    </div>
+    <div class="row">
+        <label for="early-repayment-type-select">Early repayment type:</label>
+        <select id="early-repayment-type-select" name="repaymentType">
+            <option value="">Select repayment type</option>
+            <option th:each="earlyRepaymentType : ${earlyRepaymentTypes}"
+                    th:value="${earlyRepaymentType}"
+                    th:text="${earlyRepaymentType}">
+            </option>
+        </select>
+    </div>
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+<br/>
+<br/>
+<td>
+    <a th:href="@{${url_schedule_chain}(${param_credit_id}=*{creditId})}" href="schedule-chain.html">Back to schedules</a>
+</td>
+</body>
+
+
+</html>

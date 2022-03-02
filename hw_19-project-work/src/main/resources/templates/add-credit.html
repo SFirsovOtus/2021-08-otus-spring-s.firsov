@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add credit</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<form id="add-form" th:action="@{${url_save_credit}}" th:method="post" action="add-credit.html">
+    <div class="row">
+        <label for="credit-amount-input">Credit amount:</label>
+        <input id="credit-amount-input" name="amount" type="text" value="999999.99" />
+    </div>
+    <div class="row">
+        <label for="year-percent-input">Year percent:</label>
+        <input id="year-percent-input" name="percent" type="text" value="11.25" />
+    </div>
+    <div class="row">
+        <label for="start-month-input">Start month (YYYY-MM):</label>
+        <input id="start-month-input" name="month" type="text" value="2022-02" />
+    </div>
+    <div class="row">
+        <label for="duration-in-months-input">Duration in months:</label>
+        <input id="duration-in-months-input" name="duration" type="text" value="12" />
+    </div>
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+<br/>
+<br/>
+<td>
+    <a th:href="@{${url_credits}}" href="credits.html">Show all credits</a>
+</td>
+</body>
+
+
+</html>

@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:5.0.6
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      - TZ=Europe/Moscow
+    networks:
+      - nw
+  app:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=credit_calculator
+      - TZ=Europe/Moscow
+    networks:
+      - nw
+networks:
+  nw:

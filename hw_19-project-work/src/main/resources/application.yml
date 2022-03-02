@@ -1,0 +1,19 @@
+spring:
+  main:
+    banner-mode: off
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: credit_calculator
+
+mongock:
+  runner-type: "ApplicationRunner"
+  change-logs-scan-package:
+    - ru.otus.spring.credit.calculator.changelog
+
+logging:
+  level:
+    root: info
+    org.springframework.data.mongodb.core.MongoTemplate: info
