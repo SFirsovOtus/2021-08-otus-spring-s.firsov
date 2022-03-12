@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of schedules</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .credit, .credit td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+
+        .schedule, .schedule td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1>Credit parameters:</h1>
+<table class="credit">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Credit amount</th>
+        <th>Year percent, %</th>
+        <th>Start month</th>
+        <th>Duration in months</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${creditParameters}">
+        <td th:text="${creditId}">credit_id</td>
+        <td th:text="*{creditAmount}">credit_amount</td>
+        <td th:text="*{yearPercent}">year_percent</td>
+        <td th:text="*{startMonth}">start_month</td>
+        <td th:text="*{durationInMonths}">duration_in_months</td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+
+<h2>Schedules:</h2>
+<span th:object="${schedules}" th:each="schedule : ${schedules}">
+<h4>Schedule:</h4>
+<table class="schedule">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Body amount</th>
+        <th>Percent amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${payment}" th:each="payment : ${schedule.getMonthlyPayments()}">
+        <td th:text="*{date}">date</td>
+        <td th:text="*{bodyAmount}">body_amount</td>
+        <td th:text="*{percentAmount}">percent_amount</td>
+    </tr>
+    </tbody>
+</table>
+
+<h4 th:if="${!schedule.getEarlyPayments().isEmpty()}">Early payment:</h4>
+<table class="schedule" th:if="${!schedule.getEarlyPayments().isEmpty()}">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Early amount</th>
+        <th>Body amount</th>
+        <th>Percent amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${payment}" th:each="payment : ${schedule.getEarlyPayments()}">
+        <td th:text="*{date}">date</td>
+        <td th:text="*{amount}">early_amount</td>
+        <td th:text="*{bodyAmount}">body_amount</td>
+        <td th:text="*{percentAmount}">percent_amount</td>
+    </tr>
+    </tbody>
+</table>
+
+<h4>Total:</h4>
+<table class="schedule">
+    <thead>
+    <tr>
+        <th>Monthly payment</th>
+        <th>Overpayment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${schedule}">
+        <td th:text="*{monthlyPaymentAmount}">monthly_payment</td>
+        <td th:text="*{overpaymentAmount}">overpayment</td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<br/>
+<br/>
+<br/>
+</span>
+
+<br/>
+<td>
+    <a th:href="@{${url_add_early_payment}(${param_credit_id}=*{creditId})}" href="add-early-payment.html">Add early payment</a>
+</td>
+<br/>
+<br/>
+<td>
+    <a th:href="@{${url_credits}}" href="credits.html">Show all credits</a>
+</td>
+
+</body>
+
+
+</html>
