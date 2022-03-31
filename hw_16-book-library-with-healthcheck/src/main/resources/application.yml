@@ -1,0 +1,39 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:h2:mem:testdb
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    root: info
+  file:
+    name: target/book_library.log

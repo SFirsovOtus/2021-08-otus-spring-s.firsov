@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<form id="add-form" th:action="@{${url_save_book}}" th:method="post" action="add-book.html">
+    <div class="row">
+        <label for="book-name-input">Book name:</label>
+        <input id="book-name-input" name="book" type="text" th:value="${book}" value="Treasure Island" />
+    </div>
+    <div class="row">
+        <label for="author-name-select">Author name:</label>
+        <select id="author-name-select" name="author">
+            <option value="">Select author name</option>
+            <option th:each="author : ${all_authors}"
+                    th:value="${author.name}"
+                    th:text="${author.name}">
+            </option>
+        </select>
+    </div>
+    <div class="row">
+        <label for="genres-input">Genres:</label>
+        <br/>
+        <span th:each="genre : ${all_genres}">
+            <input id="genres-input" type="checkbox" name="genres" th:value="${genre.name}"/>
+            <font th:text="${genre.name}"></font>
+            <br/>
+        </span>
+    </div>
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+<br/>
+<br/>
+<td>
+    <a th:href="@{${url_books}}" href="books.html">Show all books</a>
+</td>
+</body>
+
+
+</html>
