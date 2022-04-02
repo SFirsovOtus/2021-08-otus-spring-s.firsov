@@ -15,7 +15,7 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: false
