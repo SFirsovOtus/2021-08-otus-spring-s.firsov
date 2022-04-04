@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Need to fill all fields</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        h1 {
+            color: red;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1>Need to fill all fields</h1>
+<br/>
+<br/>
+<a th:href="@{${url_comments}(${param_book_id}=${book_id})}" href="comments.html">Back to book</a>
+</body>
+
+
+</html>

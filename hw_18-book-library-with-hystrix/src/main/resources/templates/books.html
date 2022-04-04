@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books, .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1 th:if="${books.isEmpty()}">No books</h1>
+<h1 th:if="${!books.isEmpty()}">Books:</h1>
+<table class="books" th:if="${!books.isEmpty()}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Genres</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${book}" th:each="book : ${books}">
+        <td th:text="*{id}">book_id</td>
+        <td th:text="*{name}">book_name</td>
+        <td th:text="*{author.name}">author_name</td>
+        <td th:text="*{@toStringService.convertGenreNamesToStringWithAscendingOrderByNameSeparatedByCommas(genres)}">genres</td>
+        <td>
+            <a class="url_comments" th:href="@{${url_comments}(${param_book_id}=*{id})}" href="comments.html">Show comments</a>
+        </td>
+        <td>
+            <form id="delete-form" th:action="@{${url_delete_book}(${param_book_id}=*{id})}" th:method="post" action="books.html">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br th:if="${!books.isEmpty()}" />
+<td>
+    <a th:href="@{${url_add_book}}" href="add-book.html">Add book</a>
+</td>
+
+</body>
+
+
+</html>
